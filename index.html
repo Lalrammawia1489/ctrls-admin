@@ -59,11 +59,61 @@
       color: #222;
       font-size: 1.1rem;
     }
+
+    #contact {
+      margin-top: 60px;
+      padding: 40px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.1);
+    }
+
+    #contact form input, #contact form textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    #contact form button {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    #contact form button:hover {
+      background: #0056b3;
+    }
+
+    #contact h2, #contact h3 {
+      margin-top: 0;
+    }
   </style>
 </head>
 <body>
   <h1>Welcome to Ctrl+S</h1>
   <div id="products-container">Loading products...</div>
+
+  <!-- ✅ Contact Section -->
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <p><strong>Email:</strong> <a href="mailto:ctrlsprints@gmail.com">yourname@example.com</a></p>
+    <p><strong>Phone:</strong> <a href="tel:+919089606842">+91 9876543210</a></p>
+    <p><strong>Instagram:</strong> <a href="https://www.instagram.com/ctrlsprints?igsh=MTN2YzkzaWx2eGc5eA==" target="_blank">@yourpage</a></p>
+
+    <h3 style="margin-top: 30px;">Send us a message</h3>
+    <form id="contact-form" onsubmit="submitContactForm(event)">
+      <input type="text" id="contact-name" placeholder="Your Name" required />
+      <input type="email" id="contact-email" placeholder="Your Email" required />
+      <textarea id="contact-message" placeholder="Your Message" required></textarea>
+      <button type="submit">Send</button>
+      <p id="contact-status" style="margin-top: 10px;"></p>
+    </form>
+  </section>
 
   <script>
     window.addEventListener('load', function () {
@@ -100,6 +150,35 @@
           document.getElementById("products-container").innerText = "Failed to load products.";
         });
     });
+
+    function submitContactForm(event) {
+      event.preventDefault();
+
+      const name = document.getElementById("contact-name").value.trim();
+      const email = document.getElementById("contact-email").value.trim();
+      const message = document.getElementById("contact-message").value.trim();
+      const status = document.getElementById("contact-status");
+
+      if (!name || !email || !message) {
+        status.innerText = "❌ Please fill in all fields.";
+        return;
+      }
+
+      db.collection("messages").add({
+        name,
+        email,
+        message,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      })
+      .then(() => {
+        status.innerText = "✅ Message sent successfully!";
+        document.getElementById("contact-form").reset();
+      })
+      .catch((error) => {
+        console.error("❌ Error sending message:", error);
+        status.innerText = "❌ Failed to send message.";
+      });
+    }
   </script>
 </body>
 </html>

@@ -141,14 +141,13 @@ function deleteProduct(id) {
   }
 }
 
-// ✅ Edit Product (load into form)
+// ✅ Edit Product
 function editProduct(id, name, price, description) {
   document.getElementById("product-name").value = name;
   document.getElementById("product-price").value = price;
   document.getElementById("product-description").value = description;
   document.getElementById("upload-status").innerText = "⚙️ Editing product...";
 
-  // Replace upload button temporarily
   const uploadBtn = document.getElementById("upload-product-btn");
   uploadBtn.innerText = "Update Product";
   uploadBtn.onclick = function () {
@@ -156,7 +155,7 @@ function editProduct(id, name, price, description) {
   };
 }
 
-// ✅ Update Product (text data only, not image)
+// ✅ Update Product
 function updateProduct(id) {
   const name = document.getElementById("product-name").value.trim();
   const price = parseFloat(document.getElementById("product-price").value);
